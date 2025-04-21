@@ -21,7 +21,6 @@ function Home() {
 
       setPosts(response.data);
 
-      
       if (response.data && response.data.length > 0) {
         const sortedPopularPost = [...response.data]
           ?.filter((p) => p?.view >= 10)
@@ -47,7 +46,6 @@ function Home() {
     fetchCategory();
   }, []);
 
-  
   const itemsPerPage = 4;
   const [currentPage, setCurrentPage] = useState(1);
   const indexOfLastItem = currentPage * itemsPerPage;
@@ -224,51 +222,8 @@ function Home() {
             {popularPostItems?.slice(0, 4).map((p, index) => (
               <PostCard key={index} p={p} fetchPosts={fetchPosts} />
             ))}
-            {/* <div className="col-sm-6 col-lg-3" key={index}>
-                <div className="card mb-4">
-                  <div className="card-fold position-relative">
-                    <img
-                      className="card-img"
-                      style={{
-                        width: "100%",
-                        height: "160px",
-                        objectFit: "cover",
-                      }}
-                      src={p.image}
-                      alt={p.title}
-                    />
-                  </div>
-                  <div className="card-body px-3 pt-3">
-                    <h4 className="card-title">
-                      <Link
-                        to={`${p.slug}`}
-                        className="btn-link text-reset stretched-link fw-bold text-decoration-none"
-                      >
-                        {p.title?.slice(0, 32) + "..."}
-                      </Link>
-                    </h4>
-                    <ul
-                      className="mt-3 list-style-none"
-                      style={{ listStyle: "none" }}
-                    >
-                      <li>
-                        <a href="#" className="text-dark text-decoration-none">
-                          <i className="fas fa-user"></i> {p.profile?.full_name}
-                        </a>
-                      </li>
-                      <li className="mt-2">
-                        <i className="fas fa-calendar"></i>{" "}
-                        {moment(p.date).format("DD MMM, YYYY")}
-                      </li>
-                      <li className="mt-2">
-                        <i className="fas fa-eye"></i> {p.view} Views
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </div> */}
           </div>
-         
+
           <nav className="d-flex mt-5">
             <ul className="pagination">
               <li

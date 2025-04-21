@@ -47,9 +47,7 @@ function Comments() {
         <div className="container">
           <div className="row mt-0 mt-md-4">
             <div className="col-lg-12 col-md-8 col-12">
-             
               <div className="card mb-4">
-               
                 <div className="card-header d-lg-flex align-items-center justify-content-between">
                   <div className="mb-3 mb-lg-0">
                     <h3 className="mb-0">Comments</h3>
@@ -58,11 +56,9 @@ function Comments() {
                     </span>
                   </div>
                 </div>
-                {/* Card body */}
+
                 <div className="card-body">
-                  {/* List group */}
                   <ul className="list-group list-group-flush">
-                    
                     {comments?.map((c, index) => (
                       <li className="list-group-item p-4 shadow rounded-3 mb-3">
                         <div className="d-flex">
@@ -80,10 +76,8 @@ function Comments() {
                           <div className="ms-3 mt-2">
                             <div className="d-flex align-items-center justify-content-between">
                               <div>
-                               
-                                
-                                  <p className="mb-1">Post: {c?.post?.title}</p>
-                                
+                                <p className="mb-1">Post: {c?.post?.title}</p>
+
                                 <h4 className="mb-0">{c.name}</h4>
                                 <span>{Moment(c.date)}</span>
                               </div>

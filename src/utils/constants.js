@@ -6,5 +6,5 @@ export const CLIENT_URL = "http://localhost:3000";
 export const PAYPAL_CLIENT_ID = "test";
 export const CURRENCY_SIGN = "$";
 export const userId = UserData()?.user_id;
-export const teacherId = UserData()?.teacher_id;
-console.log(teacherId);
+// export const teacherId = UserData()?.teacher_id;
+// console.log(teacherId);
