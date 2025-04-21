@@ -1,11 +1,19 @@
 import React, { useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  InputGroup,
+} from "react-bootstrap";
+import { Link, useNavigate } from "react-router";
+import { FaUserPlus, FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import Header from "../partials/Header";
 import Footer from "../partials/Footer";
-import { useParams, Link, useNavigate } from "react-router";
-
-import apiInstance from "../../utils/axios";
-import { useAuthStore } from "../../store/auth";
 import { register } from "../../utils/auth";
+import { useAuthStore } from "../../store/auth";
 
 function Register() {
   const [bioData, setBioData] = useState({
@@ -15,6 +23,8 @@ function Register() {
     password2: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const navigate = useNavigate();
 
@@ -54,116 +64,137 @@ function Register() {
     setIsLoading(false);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const toggleConfirmPasswordVisibility = () => {
+    setShowConfirmPassword(!showConfirmPassword);
+  };
+
   return (
     <>
       <Header />
-      <section
-        className="container d-flex flex-column vh-100"
-        style={{ marginTop: "150px" }}
-      >
-        <div className="row align-items-center justify-content-center g-0 h-lg-100 py-8">
-          <div className="col-lg-5 col-md-8 py-8 py-xl-0">
-            <div className="card shadow">
-              <div className="card-body p-6">
-                <div className="mb-4">
-                  <h1 className="mb-1 fw-bold">Sign up</h1>
-                  <span>
-                    Already have an account?
-                    <Link to="/login/" className="ms-1">
+      <Container className="d-flex flex-column min-vh-100 py-5">
+        <Row className="align-items-center justify-content-center my-5">
+          <Col lg={5} md={8}>
+            <Card className="border-0 shadow-lg">
+              <Card.Body className="p-5">
+                <div className="text-center mb-4">
+                  <h2 className="fw-bold mb-1">Create Account</h2>
+                  <p className="text-muted">
+                    Already have an account?{" "}
+                    <Link to="/login/" className="text-primary fw-semibold">
                       Log In
                     </Link>
-                  </span>
+                  </p>
                 </div>
 
-                <form className="needs-validation" onSubmit={handleRegister}>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Full Name
-                    </label>
-                    <input
+                <Form onSubmit={handleRegister}>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Full Name</Form.Label>
+                    <Form.Control
                       type="text"
-                      onChange={handleBioDataChange}
-                      value={bioData.full_name}
-                      id="full_name"
-                      className="form-control"
                       name="full_name"
+                      value={bioData.full_name}
+                      onChange={handleBioDataChange}
                       placeholder="John Doe"
-                      required="true"
+                      required
+                      className="py-2"
                     />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      onChange={handleBioDataChange}
-                      value={bioData.email}
-                      id="email"
-                      className="form-control"
-                      name="email"
-                      placeholder="johndoe@gmail.com"
-                      required="true"
-                    />
-                  </div>
+                    <Form.Control.Feedback type="invalid">
+                      Please enter your full name.
+                    </Form.Control.Feedback>
+                  </Form.Group>
 
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type="password"
+                  <Form.Group className="mb-4">
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
+                      type="email"
+                      name="email"
+                      value={bioData.email}
                       onChange={handleBioDataChange}
-                      value={bioData.password}
-                      id="password"
-                      className="form-control"
-                      name="password"
-                      placeholder="**************"
-                      required="true"
+                      placeholder="johndoe@example.com"
+                      required
+                      className="py-2"
                     />
-                  </div>
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Confirm Password
-                    </label>
-                    <input
-                      type="password"
-                      onChange={handleBioDataChange}
-                      value={bioData.password2}
-                      id="password"
-                      className="form-control"
-                      name="password2"
-                      placeholder="**************"
-                      required="true"
-                    />
-                  </div>
-                  <div>
-                    <div className="d-grid">
-                      <button
-                        className="btn btn-primary w-100"
-                        type="submit"
-                        disabled={isLoading}
+                    <Form.Control.Feedback type="invalid">
+                      Please enter a valid email address.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={bioData.password}
+                        onChange={handleBioDataChange}
+                        placeholder="Enter your password"
+                        required
+                        className="py-2"
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={togglePasswordVisibility}
                       >
-                        {isLoading ? (
-                          <>
-                            <span className="mr-2 ">Processing...</span>
-                            <i className="fas fa-spinner fa-spin" />
-                          </>
-                        ) : (
-                          <>
-                            <span className="mr-2">Sign Up</span>
-                            <i className="fas fa-user-plus" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    </InputGroup>
+                    <Form.Text className="text-muted">
+                      Password must be at least 8 characters long.
+                    </Form.Text>
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label>Confirm Password</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showConfirmPassword ? "text" : "password"}
+                        name="password2"
+                        value={bioData.password2}
+                        onChange={handleBioDataChange}
+                        placeholder="Confirm your password"
+                        required
+                        className="py-2"
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={toggleConfirmPasswordVisibility}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    </InputGroup>
+                    <Form.Control.Feedback type="invalid">
+                      Passwords must match.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="w-100 py-2 mt-2"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <FaSpinner className="fa-spin me-2" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <FaUserPlus className="me-2" />
+                        Sign Up
+                      </>
+                    )}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
       <Footer />
     </>
   );
