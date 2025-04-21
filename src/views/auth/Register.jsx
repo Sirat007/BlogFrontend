@@ -98,7 +98,7 @@ function Register() {
                       name="full_name"
                       value={bioData.full_name}
                       onChange={handleBioDataChange}
-                      placeholder="John Doe"
+                      placeholder="Enter your full name"
                       required
                       className="py-2"
                     />
@@ -114,7 +114,7 @@ function Register() {
                       name="email"
                       value={bioData.email}
                       onChange={handleBioDataChange}
-                      placeholder="johndoe@example.com"
+                      placeholder="Enter your email"
                       required
                       className="py-2"
                     />

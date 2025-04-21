@@ -81,7 +81,7 @@ function Login() {
                       name="email"
                       value={bioData.email}
                       onChange={handleBioDataChange}
-                      placeholder="johndoe@example.com"
+                      placeholder="Enter your email"
                       required
                       className="py-2"
                     />
