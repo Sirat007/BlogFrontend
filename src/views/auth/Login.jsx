@@ -1,18 +1,25 @@
 import React, { useState } from "react";
+import {
+  Container,
+  Row,
+  Col,
+  Card,
+  Form,
+  Button,
+  InputGroup,
+} from "react-bootstrap";
+import { Link, useNavigate } from "react-router";
+import { FaSignInAlt, FaSpinner, FaEye, FaEyeSlash } from "react-icons/fa";
 import Header from "../partials/Header";
 import Footer from "../partials/Footer";
-import { useParams, Link, useNavigate } from "react-router";
-
-import apiInstance from "../../utils/axios";
+import { login } from "../../utils/auth";
 import { useAuthStore } from "../../store/auth";
-import { login, register } from "../../utils/auth";
-import Toast from "../../plugin/Toast";
 
 function Login() {
   const [bioData, setBioData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
-
   const navigate = useNavigate();
 
   const handleBioDataChange = (event) => {
@@ -44,116 +51,104 @@ function Login() {
     setIsLoading(false);
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   return (
     <>
       <Header />
-      <section
-        className="container d-flex flex-column vh-100"
-        style={{ marginTop: "150px" }}
-      >
-        <div className="row align-items-center justify-content-center g-0 h-lg-100 py-8">
-          <div className="col-lg-5 col-md-8 py-8 py-xl-0">
-            <div className="card shadow">
-              <div className="card-body p-6">
-                <div className="mb-4">
-                  <h1 className="mb-1 fw-bold">Log in</h1>
-                  <span>
-                    Don’t have an account?
-                    <Link to="/register/" className="ms-1">
+      <Container className="d-flex flex-column min-vh-100 py-5">
+        <Row className="align-items-center justify-content-center my-5">
+          <Col lg={5} md={8}>
+            <Card className="border-0 shadow-lg">
+              <Card.Body className="p-5">
+                <div className="text-center mb-4">
+                  <h2 className="fw-bold mb-1">Welcome Back</h2>
+                  <p className="text-muted">
+                    Don't have an account?{" "}
+                    <Link to="/register/" className="text-primary fw-semibold">
                       Sign up
                     </Link>
-                  </span>
+                  </p>
                 </div>
 
-                <form
-                  className="needs-validation"
-                  noValidate=""
-                  onSubmit={handleLogin}
-                >
-                  <div className="mb-3">
-                    <label htmlFor="email" className="form-label">
-                      Email Address
-                    </label>
-                    <input
+                <Form onSubmit={handleLogin}>
+                  <Form.Group className="mb-4">
+                    <Form.Label>Email Address</Form.Label>
+                    <Form.Control
                       type="email"
-                      onChange={handleBioDataChange}
-                      value={bioData.email}
-                      id="email"
-                      className="form-control"
                       name="email"
-                      placeholder="johndoe@gmail.com"
-                      required="true"
-                    />
-                    <div className="invalid-feedback">
-                      Please enter valid username.
-                    </div>
-                  </div>
-
-                  <div className="mb-3">
-                    <label htmlFor="password" className="form-label">
-                      Password
-                    </label>
-                    <input
-                      type="password"
+                      value={bioData.email}
                       onChange={handleBioDataChange}
-                      value={bioData.password}
-                      id="password"
-                      className="form-control"
-                      name="password"
-                      placeholder="**************"
-                      required="true"
+                      placeholder="johndoe@example.com"
+                      required
+                      className="py-2"
                     />
-                    <div className="invalid-feedback">
-                      Please enter valid password.
-                    </div>
+                    <Form.Control.Feedback type="invalid">
+                      Please enter a valid email address.
+                    </Form.Control.Feedback>
+                  </Form.Group>
+
+                  <Form.Group className="mb-4">
+                    <Form.Label>Password</Form.Label>
+                    <InputGroup>
+                      <Form.Control
+                        type={showPassword ? "text" : "password"}
+                        name="password"
+                        value={bioData.password}
+                        onChange={handleBioDataChange}
+                        placeholder="Enter your password"
+                        required
+                        className="py-2"
+                      />
+                      <Button
+                        variant="outline-secondary"
+                        onClick={togglePasswordVisibility}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                      <Form.Control.Feedback type="invalid">
+                        Please enter your password.
+                      </Form.Control.Feedback>
+                    </InputGroup>
+                  </Form.Group>
+
+                  <div className="d-flex justify-content-between align-items-center mb-4">
+                    <Form.Check
+                      type="checkbox"
+                      id="rememberMe"
+                      label="Remember me"
+                    />
+                    <Link to="/forgot-password/" className="text-primary">
+                      Forgot password?
+                    </Link>
                   </div>
 
-                  <div className="d-lg-flex justify-content-between align-items-center mb-4">
-                    <div className="form-check">
-                      <input
-                        type="checkbox"
-                        className="form-check-input"
-                        id="rememberme"
-                        required=""
-                      />
-                      <label className="form-check-label" htmlFor="rememberme">
-                        Remember me
-                      </label>
-                      <div className="invalid-feedback">
-                        You must agree before submitting.
-                      </div>
-                    </div>
-                    <div>
-                      <Link to="/forgot-password/">Forgot your password?</Link>
-                    </div>
-                  </div>
-                  <div>
-                    <div className="d-grid">
-                      <button
-                        className="btn btn-primary w-100"
-                        type="submit"
-                        disabled={isLoading}
-                      >
-                        {isLoading ? (
-                          <>
-                            <span className="mr-2 ">Processing...</span>
-                            <i className="fas fa-spinner fa-spin" />
-                          </>
-                        ) : (
-                          <>
-                            <span className="mr-2">Log In </span>
-                            <i className="fas fa-sign-in-alt" />
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+                  <Button
+                    variant="primary"
+                    type="submit"
+                    className="w-100 py-2 mb-3"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <>
+                        <FaSpinner className="fa-spin me-2" />
+                        Processing...
+                      </>
+                    ) : (
+                      <>
+                        <FaSignInAlt className="me-2" />
+                        Log In
+                      </>
+                    )}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
       <Footer />
     </>
   );
